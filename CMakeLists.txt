@@ -8,6 +8,7 @@ endif()
 # set the same behavior for windows as it is on linux
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 
+
 # find dependencies
 set(THIS_PACKAGE_INCLUDE_DEPENDS
   hardware_interface
@@ -16,12 +17,17 @@ set(THIS_PACKAGE_INCLUDE_DEPENDS
   rclcpp_lifecycle
 )
 
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} /home/ken/ros2_ws/pigpio-master/util)
+
 # find dependencies
 find_package(backward_ros REQUIRED)
 find_package(ament_cmake REQUIRED)
 foreach(Dependency IN ITEMS ${THIS_PACKAGE_INCLUDE_DEPENDS})
   find_package(${Dependency} REQUIRED)
 endforeach()
+
+find_package(pigpio REQUIRED)
+
 
 ## COMPILE
 add_library(
@@ -41,6 +47,7 @@ ament_target_dependencies(
   robot_controller2 PUBLIC
   ${THIS_PACKAGE_INCLUDE_DEPENDS}
 )
+target_link_libraries(robot_controller2 PUBLIC pigpio)
 
 # Export hardware plugins
 pluginlib_export_plugin_description_file(hardware_interface robot_controller2.xml)

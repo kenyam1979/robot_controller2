@@ -15,7 +15,7 @@ namespace motor_encoder
     void MotorEncoder::initialize(int p, double wr, double et)
     {
         pin_ = p;
-        wheel_radius_ wr;
+        wheel_radius_ = wr;
         encoder_tooth_ = et;
 
         if (gpioInitialise() < 0)
