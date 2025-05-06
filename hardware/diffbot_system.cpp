@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 #include <chrono>
 #include <cmath>
 #include <cstddef>
@@ -31,7 +30,6 @@
 #include "robot_controller2/motor.hpp"
 #include "robot_controller2/motor_encoder.hpp"
 
-
 #define CONTROL_FREQ 0.5 // Hz
 
 #define MOT_L_1 23
@@ -45,9 +43,7 @@
 #define WHEEL_RADIUS 0.035 // Meter
 #define ENCODER_TOOTH 40.0 // 40 puls per revolution
 
-
-
-namespace test_control
+namespace robot_controller2
 {
   hardware_interface::CallbackReturn DiffBotSystemHardware::on_init(
       const hardware_interface::HardwareInfo &info)
@@ -164,13 +160,12 @@ namespace test_control
 
     motor_pid_left_.initialize();
     motor_pid_right_.initialize();
-    
+
     motor_left_.initialize(MOT_L_1, MOT_L_2);
     motor_right_.initialize(MOT_R_1, MOT_R_2);
 
     motor_encoder_left_.initialize(ENC_L, WHEEL_RADIUS, ENCODER_TOOTH);
     motor_encoder_right_.initialize(ENC_R, WHEEL_RADIUS, ENCODER_TOOTH);
-
 
     // set some default values
     for (auto i = 0u; i < hw_positions_.size(); i++)
@@ -243,7 +238,7 @@ namespace test_control
     return hardware_interface::return_type::OK;
   }
 
-  hardware_interface::return_type test_control::DiffBotSystemHardware::write(
+  hardware_interface::return_type DiffBotSystemHardware::write(
       const rclcpp::Time & /*time*/, const rclcpp::Duration &period)
   {
     // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
@@ -260,7 +255,7 @@ namespace test_control
     // RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 500, "%s", ss.str().c_str());
 
     int mv_left;
-    int mv_right;   
+    int mv_right;
 
     mv_left = motor_pid_left_.calculateManipulatingVariable(hw_commands_[0], hw_velocities_[0], period.seconds());
     mv_right = motor_pid_right_.calculateManipulatingVariable(hw_commands_[1], hw_velocities_[1], period.seconds());
@@ -273,11 +268,11 @@ namespace test_control
     return hardware_interface::return_type::OK;
   }
 
-} // namespace test_control
+} // namespace robot_controller2
 
 #include "pluginlib/class_list_macros.hpp"
 PLUGINLIB_EXPORT_CLASS(
-    test_control::DiffBotSystemHardware, hardware_interface::SystemInterface)
+    robot_controller2::DiffBotSystemHardware, hardware_interface::SystemInterface)
 
 /*
 

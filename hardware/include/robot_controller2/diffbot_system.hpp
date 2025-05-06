@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef TEST_CONTROL__DIFFBOT_SYSTEM_HPP_
-#define TEST_CONTROL__DIFFBOT_SYSTEM_HPP_
+#ifndef ROBOT_CONTROLLER2__DIFFBOT_SYSTEM_HPP_
+#define ROBOT_CONTROLLER2__DIFFBOT_SYSTEM_HPP_
 
 #include <memory>
 #include <string>
@@ -35,7 +35,7 @@
 #include "robot_controller2/motor.hpp"
 #include "robot_controller2/motor_encoder.hpp"
 
-namespace test_control
+namespace robot_controller2
 {
   class DiffBotSystemHardware : public hardware_interface::SystemInterface
   {
@@ -97,4 +97,4 @@ namespace test_control
 
 } // namespace test_control
 
-#endif // TEST_CONTROL__DIFFBOT_SYSTEM_HPP_
+#endif // ROBOT_CONTROLLER2__DIFFBOT_SYSTEM_HPP_

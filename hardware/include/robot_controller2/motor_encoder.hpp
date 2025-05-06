@@ -7,7 +7,7 @@ namespace motor_encoder
     {
 
     public:
-        MotorEncoder(int p, double wr, double et);
+        MotorEncoder();
         void initialize(int p, double wr, double et);
         int getEncodderCount();
         double getVelocity(double dt);
