@@ -47,7 +47,7 @@ ament_target_dependencies(
   robot_controller2 PUBLIC
   ${THIS_PACKAGE_INCLUDE_DEPENDS}
 )
-target_link_libraries(robot_controller2 PUBLIC pigpio)
+target_link_libraries(robot_controller2 PUBLIC pigpiod_if2)
 
 # Export hardware plugins
 pluginlib_export_plugin_description_file(hardware_interface robot_controller2.xml)

@@ -1,6 +1,6 @@
 #include "robot_controller2/motor.hpp"
 #include <iostream>
-#include <pigpio.h>
+#include <pigpiod_if2.h>
 
 namespace motor
 {
@@ -15,18 +15,20 @@ namespace motor
         pin1_ = p1;
         pin2_ = p2;
 
-        if (gpioInitialise() < 0)
-        {
-            std::cerr << "Failed to initialize pigpio" << std::endl;
-        }
-        gpioSetMode(pin1_, PI_OUTPUT);
-        gpioSetMode(pin2_, PI_OUTPUT);
+        pi_ = pigpio_start(NULL, NULL);
 
-        gpioSetPWMfrequency(pin1_, 60);
-        gpioSetPWMfrequency(pin2_, 60);
+        // if (gpioInitialise() < 0)
+        // {
+        //     std::cerr << "Failed to initialize pigpio" << std::endl;
+        // }
+        set_mode(pi_, pin1_, PI_OUTPUT);
+        set_mode(pi_, pin2_, PI_OUTPUT);
 
-        gpioSetPWMrange(pin1_, 100);
-        gpioSetPWMrange(pin2_, 100);
+        set_PWM_frequency(pi_, pin1_, 60);
+        set_PWM_frequency(pi_, pin2_, 60);
+
+        set_PWM_range(pi_, pin1_, 100);
+        set_PWM_range(pi_, pin2_, 100);
 
         std::cout << "##### Motor initiated with pin1=" << p1 << " pin2=" << p2 << " #####" << std::endl;
     }
@@ -35,26 +37,27 @@ namespace motor
     {
         if (mv > 0)
         {
-            gpioPWM(pin1_, mv);
-            gpioPWM(pin2_, 0);
+            set_PWM_dutycycle(pi_, pin1_, mv);
+            set_PWM_dutycycle(pi_, pin2_, 0);
         }
         else
         {
-            gpioPWM(pin1_, 0);
-            gpioPWM(pin2_, -mv);
+            set_PWM_dutycycle(pi_, pin1_, 0);
+            set_PWM_dutycycle(pi_, pin2_, -mv);
         }
         std::cout << "##### Motor recieved mv=" << mv << " #####" << std::endl;
     }
 
     void Motor::stopMotor()
     {
-        gpioPWM(pin1_, 0);
-        gpioPWM(pin2_, 0);
+        set_PWM_dutycycle(pi_, pin1_, 0);
+        set_PWM_dutycycle(pi_, pin2_, 0);
         std::cout << "##### Motor stopped #####" << std::endl;
     }
 
     Motor::~Motor()
     {
-        gpioTerminate();
+        // gpioTerminate();
+        pigpio_stop(pi_);
     }
 }

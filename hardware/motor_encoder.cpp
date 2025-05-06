@@ -1,5 +1,5 @@
 #include <cstdlib>
-#include <pigpio.h>
+#include <pigpiod_if2.h>
 #include <bits/stdc++.h>
 #include <iostream>
 
@@ -8,26 +8,25 @@
 namespace motor_encoder
 {
 
-    MotorEncoder::MotorEncoder() 
+    MotorEncoder::MotorEncoder()
     {
-
     }
     void MotorEncoder::initialize(int p, double wr, double et)
     {
         pin_ = p;
         wheel_radius_ = wr;
         encoder_tooth_ = et;
-
-        if (gpioInitialise() < 0)
-        {
-            std::cerr << "Failed to initialize pigpio" << std::endl;
-        }
+        pi_ = pigpio_start(NULL, NULL);
+        // if (gpioInitialise() < 0)
+        // {
+        //     std::cerr << "Failed to initialize pigpio" << std::endl;
+        // }
 
         velocity_ = 0.0;
         count_ = 0;
-        gpioSetMode(pin_, PI_INPUT);
-        gpioSetPullUpDown(pin_, PI_PUD_UP);
-        gpioSetAlertFuncEx(pin_, _encCallbackEx, this);
+        set_mode(pi_, pin_, PI_INPUT);
+        set_pull_up_down(pi_, pin_, PI_PUD_UP);
+        callback_ex(pi_, pin_, RISING_EDGE, _encCallbackEx, this);
 
         std::cout << "##### Motor Encoder initiated with pin=" << p << " #####" << std::endl;
     }
@@ -48,7 +47,8 @@ namespace motor_encoder
 
     MotorEncoder::~MotorEncoder()
     {
-        gpioTerminate();
+        // gpioTerminate();
+        pigpio_stop(pi_);
     }
 
 }

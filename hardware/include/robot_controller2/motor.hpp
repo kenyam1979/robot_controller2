@@ -13,6 +13,7 @@ namespace motor
         ~Motor();
 
     private:
+        int pi_;
         int pin1_;
         int pin2_;
     };

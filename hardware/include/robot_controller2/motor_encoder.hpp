@@ -14,6 +14,7 @@ namespace motor_encoder
         ~MotorEncoder();
 
     private:
+        int pi_;
         int pin_;
         double wheel_radius_;
         double encoder_tooth_;
@@ -22,7 +23,7 @@ namespace motor_encoder
         int count_;
         int prev_count_ = 0;
 
-        void _encCallback(int gpio, int level, uint32_t tick)
+        void _encCallback(unsigned gpio, unsigned level, uint32_t tick)
         {
             if (level == 1)
             {
@@ -31,7 +32,7 @@ namespace motor_encoder
             }
         }
 
-        static void _encCallbackEx(int gpio, int level, uint32_t tick, void *user)
+        static void _encCallbackEx(int pi, unsigned gpio, unsigned level, uint32_t tick, void *user)
         {
             MotorEncoder *myself = (MotorEncoder *)user;
             myself->_encCallback(gpio, level, tick);
