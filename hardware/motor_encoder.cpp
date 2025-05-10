@@ -47,7 +47,6 @@ namespace motor_encoder
 
     MotorEncoder::~MotorEncoder()
     {
-        // gpioTerminate();
         pigpio_stop(pi_);
     }
 

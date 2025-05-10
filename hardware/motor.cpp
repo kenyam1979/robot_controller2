@@ -17,10 +17,10 @@ namespace motor
 
         pi_ = pigpio_start(NULL, NULL);
 
-        // if (gpioInitialise() < 0)
-        // {
-        //     std::cerr << "Failed to initialize pigpio" << std::endl;
-        // }
+        if (pi_ < 0)
+        {
+            std::cerr << "Failed to initialize pigpio" << std::endl;
+        }
         set_mode(pi_, pin1_, PI_OUTPUT);
         set_mode(pi_, pin2_, PI_OUTPUT);
 
@@ -57,7 +57,6 @@ namespace motor
 
     Motor::~Motor()
     {
-        // gpioTerminate();
         pigpio_stop(pi_);
     }
 }
