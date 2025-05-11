@@ -10,7 +10,8 @@ namespace motor_encoder
         MotorEncoder();
         void initialize(int p, double wr, double et);
         int getEncodderCount();
-        double getVelocity(double dt);
+        double getVelocity(double dt);          // m/s
+        double getAngularVelocity(double dt);   //rad/s
         ~MotorEncoder();
 
     private:
@@ -19,7 +20,8 @@ namespace motor_encoder
         double wheel_radius_;
         double encoder_tooth_;
 
-        double velocity_ = 0.0;
+        double velocity_ = 0.0;             // m/s
+        double angular_velocity_ = 0.0;     // rad/s
         int count_;
         int prev_count_ = 0;
 

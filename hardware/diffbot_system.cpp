@@ -227,11 +227,11 @@ namespace robot_controller2
     // }
     // RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 500, "%s", ss.str().c_str());
 
-    hw_velocities_[0] = motor_encoder_left_.getVelocity(period.seconds());
-    hw_velocities_[1] = motor_encoder_right_.getVelocity(period.seconds());
+    hw_velocities_[0] = motor_encoder_left_.getAngularVelocity(period.seconds());
+    hw_velocities_[1] = motor_encoder_right_.getAngularVelocity(period.seconds());
 
-    hw_positions_[0] = hw_positions_[0] + period.seconds() * hw_velocities_[0];
-    hw_positions_[1] = hw_positions_[1] + period.seconds() * hw_velocities_[1];
+    hw_positions_[0] = hw_positions_[0] + period.seconds() * hw_velocities_[0] * WHEEL_RADIUS;
+    hw_positions_[1] = hw_positions_[1] + period.seconds() * hw_velocities_[1] * WHEEL_RADIUS;
 
     // END: This part here is for exemplary purposes - Please do not copy to your production code
 

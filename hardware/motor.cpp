@@ -45,7 +45,7 @@ namespace motor
             set_PWM_dutycycle(pi_, pin1_, 0);
             set_PWM_dutycycle(pi_, pin2_, -mv);
         }
-        std::cout << "##### Motor recieved mv=" << mv << " #####" << std::endl;
+        // std::cout << "##### Motor recieved mv=" << mv << " #####" << std::endl;
     }
 
     void Motor::stopMotor()

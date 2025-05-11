@@ -20,6 +20,7 @@ namespace motor_pid
 
         double target_velocity_ = 0.0;
         double current_velocity_ = 0.0;
+        int mv_ = 0;
 
         double error_P_ = 0.0;
         double error_P_prev_ = 0.0;

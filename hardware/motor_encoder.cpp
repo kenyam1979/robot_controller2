@@ -23,6 +23,7 @@ namespace motor_encoder
         // }
 
         velocity_ = 0.0;
+        angular_velocity_ = 0.0;
         count_ = 0;
         set_mode(pi_, pin_, PI_INPUT);
         set_pull_up_down(pi_, pin_, PI_PUD_UP);
@@ -38,11 +39,20 @@ namespace motor_encoder
 
     double MotorEncoder::getVelocity(double dt)
     {
-        velocity_ = (count_ - prev_count_) / encoder_tooth_ / dt * (2.0 * M_PI * wheel_radius_);
+        velocity_ = this->getAngularVelocity(dt) * wheel_radius_;
         prev_count_ = count_;
 
-        std::cout << "##### Motor velocity=" << velocity_ << " #####" << std::endl;
+        // std::cout << "##### Motor velocity=" << velocity_ << " #####" << std::endl;
         return velocity_;
+    }
+
+    double MotorEncoder::getAngularVelocity(double dt)
+    {
+        angular_velocity_ = (count_ - prev_count_) / encoder_tooth_ / dt * (2.0 * M_PI);
+        prev_count_ = count_;
+
+        // std::cout << "##### Motor angular velocity=" << angular_velocity_ << " #####" << std::endl;
+        return angular_velocity_;
     }
 
     MotorEncoder::~MotorEncoder()
