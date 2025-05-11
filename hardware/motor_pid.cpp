@@ -21,14 +21,14 @@ namespace motor_pid
         current_velocity_ = current_v;
 
     
-        if (target_velocity_ == 0) {
+        if (target_velocity_ == 0.0) {
             this->reset();
             return 0;
         }
 
         if (dt <= 0.0)
         {
-            std::cerr << "##### dt is not valid #####" << std::endl;
+            std::cout << "##### dt is not valid #####" << std::endl;
             return mv_;
         }
 
@@ -61,7 +61,7 @@ namespace motor_pid
         error_I_ = 0.0;
         error_D_ = 0.0;
 
-        std::cout << "##### Motor PID is reset ####" << std::endl;
+        // std::cout << "##### Motor PID is reset ####" << std::endl;
     }
 
     MotorPID::~MotorPID()
