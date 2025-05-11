@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 project(robot_controller2 LANGUAGES CXX)
 
 if(CMAKE_CXX_COMPILER_ID MATCHES "(GNU|Clang)")
-  add_compile_options(-Wall -Wextra)
+  add_compile_options(-Wall -Wextra -pthread)
 endif()
 
 # set the same behavior for windows as it is on linux

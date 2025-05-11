@@ -35,17 +35,28 @@ namespace motor
 
     void Motor::setManipulatingVariable(int mv)
     {
-        if (mv > 0)
+        int e1, e2;
+
+        if (mv > 100)
+            mv = 100;
+        else if (mv < -100)
+            mv = -100;
+
+        if (mv >= 0)
         {
-            set_PWM_dutycycle(pi_, pin1_, mv);
-            set_PWM_dutycycle(pi_, pin2_, 0);
-        }
+            e1 = set_PWM_dutycycle(pi_, pin1_, mv);
+            e2 = set_PWM_dutycycle(pi_, pin2_, 0);
+            // std::cerr << pigpio_error(e1) << std::endl;
+            // std::cerr << pigpio_error(e2) << std::endl;
+        }   
         else
         {
-            set_PWM_dutycycle(pi_, pin1_, 0);
-            set_PWM_dutycycle(pi_, pin2_, -mv);
+            e1 = set_PWM_dutycycle(pi_, pin1_, 0);
+            e2 = set_PWM_dutycycle(pi_, pin2_, -mv);
+            // std::cerr << pigpio_error(e1) << std::endl;
+            // std::cerr << pigpio_error(e2) << std::endl;
         }
-        // std::cout << "##### Motor recieved mv=" << mv << " #####" << std::endl;
+        std::cout << "##### Motor recieved mv=" << mv << " #####" << std::endl;
     }
 
     void Motor::stopMotor()

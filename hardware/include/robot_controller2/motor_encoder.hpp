@@ -22,8 +22,8 @@ namespace motor_encoder
 
         double velocity_ = 0.0;             // m/s
         double angular_velocity_ = 0.0;     // rad/s
-        int count_;
-        int prev_count_ = 0;
+        unsigned count_;
+        unsigned prev_count_ = 0;
 
         void _encCallback(unsigned gpio, unsigned level, uint32_t tick)
         {
