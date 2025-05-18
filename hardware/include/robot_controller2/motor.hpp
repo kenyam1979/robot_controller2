@@ -3,6 +3,10 @@
 
 namespace motor
 {
+
+    #define MAX_MV 500.0
+    #define PWM_FREQ 60
+
     class Motor
     {
     public:

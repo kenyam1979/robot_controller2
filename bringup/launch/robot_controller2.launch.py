@@ -81,7 +81,7 @@ def generate_launch_description():
             ("~/robot_description", "/robot_description"),
             ("/diffbot_base_controller/cmd_vel", "/cmd_vel"),
         ],
-        prefix=['gdb -ex run --args']
+        prefix=['xterm -e gdb -ex run --args']
     )
     # robot_state_pub_node = Node(
     #     package="robot_state_publisher",

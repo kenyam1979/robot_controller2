@@ -14,9 +14,10 @@ namespace motor_pid
         ~MotorPID();
 
     private:
-        const double kKp = 80.0;
-        const double kKi = 100.0;
-        const double kKd = 0.1;
+        const double kKp = 1.0; // 80.0
+        const double kKi = 1.0; //100.0
+        const double kKd = 0.05; // 0.1
+        const double kMvCoef = 70.0;
 
         double target_velocity_ = 0.0;
         double current_velocity_ = 0.0;

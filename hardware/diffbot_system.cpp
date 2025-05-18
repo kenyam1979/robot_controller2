@@ -227,11 +227,31 @@ namespace robot_controller2
     // }
     // RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 500, "%s", ss.str().c_str());
 
-    hw_velocities_[0] = motor_encoder_left_.getAngularVelocity(period.seconds());
-    hw_velocities_[1] = motor_encoder_right_.getAngularVelocity(period.seconds());
+    double reverse_flg = 1.0;
 
-    hw_positions_[0] = hw_positions_[0] + period.seconds() * hw_velocities_[0] * WHEEL_RADIUS;
-    hw_positions_[1] = hw_positions_[1] + period.seconds() * hw_velocities_[1] * WHEEL_RADIUS;
+
+    if (hw_commands_[0] < 0)
+    {
+      reverse_flg = -1.0;
+    }
+    else
+    {
+      reverse_flg = 1.0;
+    }
+    hw_velocities_[0] = motor_encoder_left_.getAngularVelocity(period.seconds()) * reverse_flg;
+    hw_positions_[0] = hw_positions_[0] + period.seconds() * hw_velocities_[0] * WHEEL_RADIUS * reverse_flg;
+
+
+    if (hw_commands_[1] < 0)
+    {
+      reverse_flg = -1.0;
+    }
+    else
+    {
+      reverse_flg = 1.0;
+    }
+    hw_velocities_[1] = motor_encoder_right_.getAngularVelocity(period.seconds()) * reverse_flg;
+    hw_positions_[1] = hw_positions_[1] + period.seconds() * hw_velocities_[1] * WHEEL_RADIUS * reverse_flg;
 
     // END: This part here is for exemplary purposes - Please do not copy to your production code
 
@@ -273,18 +293,3 @@ namespace robot_controller2
 #include "pluginlib/class_list_macros.hpp"
 PLUGINLIB_EXPORT_CLASS(
     robot_controller2::DiffBotSystemHardware, hardware_interface::SystemInterface)
-
-/*
-
-ros2 topic pub --rate 10 /cmd_vel geometry_msgs/msg/TwistStamped "
-twist:
-  linear:
-    x: 0.7
-    y: 0.0
-    z: 0.0
-  angular:
-    x: 0.0
-    y: 0.0
-    z: 1.0"
-
-*/

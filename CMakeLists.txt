@@ -3,6 +3,7 @@ project(robot_controller2 LANGUAGES CXX)
 
 if(CMAKE_CXX_COMPILER_ID MATCHES "(GNU|Clang)")
   add_compile_options(-Wall -Wextra -pthread)
+  add_compile_options(-g3 -O0)
 endif()
 
 # set the same behavior for windows as it is on linux
@@ -48,6 +49,7 @@ ament_target_dependencies(
   ${THIS_PACKAGE_INCLUDE_DEPENDS}
 )
 target_link_libraries(robot_controller2 PUBLIC pigpiod_if2)
+target_link_libraries(robot_controller2 PUBLIC rt)
 
 # Export hardware plugins
 pluginlib_export_plugin_description_file(hardware_interface robot_controller2.xml)
@@ -58,7 +60,7 @@ install(
   DESTINATION include/robot_controller2
 )
 install(
-  DIRECTORY description/launch description/ros2_control description/urdf
+  DIRECTORY description/ros2_control
   DESTINATION share/robot_controller2
 )
 install(

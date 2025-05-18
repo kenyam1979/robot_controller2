@@ -1,6 +1,12 @@
-#include "robot_controller2/motor.hpp"
 #include <iostream>
+
 #include <pigpiod_if2.h>
+
+#include "rclcpp/rclcpp.hpp"
+#include "rclcpp/logger.hpp"
+#include "rclcpp/macros.hpp"
+
+#include "robot_controller2/motor.hpp"
 
 namespace motor
 {
@@ -24,11 +30,11 @@ namespace motor
         set_mode(pi_, pin1_, PI_OUTPUT);
         set_mode(pi_, pin2_, PI_OUTPUT);
 
-        set_PWM_frequency(pi_, pin1_, 60);
-        set_PWM_frequency(pi_, pin2_, 60);
+        set_PWM_frequency(pi_, pin1_, PWM_FREQ);
+        set_PWM_frequency(pi_, pin2_, PWM_FREQ);
 
-        set_PWM_range(pi_, pin1_, 100);
-        set_PWM_range(pi_, pin2_, 100);
+        set_PWM_range(pi_, pin1_, MAX_MV);
+        set_PWM_range(pi_, pin2_, MAX_MV);
 
         std::cout << "##### Motor initiated with pin1=" << p1 << " pin2=" << p2 << " #####" << std::endl;
     }
@@ -37,10 +43,10 @@ namespace motor
     {
         int e1, e2;
 
-        if (mv > 100)
-            mv = 100;
-        else if (mv < -100)
-            mv = -100;
+        if (mv > MAX_MV)
+            mv = MAX_MV;
+        else if (mv < -MAX_MV)
+            mv = -MAX_MV;
 
         if (mv >= 0)
         {
@@ -63,7 +69,7 @@ namespace motor
     {
         set_PWM_dutycycle(pi_, pin1_, 0);
         set_PWM_dutycycle(pi_, pin2_, 0);
-        std::cout << "##### Motor stopped #####" << std::endl;
+        // std::cout << "##### Motor stopped #####" << std::endl;
     }
 
     Motor::~Motor()

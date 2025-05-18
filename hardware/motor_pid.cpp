@@ -1,10 +1,10 @@
 #include <iostream>
 #include "robot_controller2/motor_pid.hpp"
+#include "robot_controller2/motor.hpp"
 
 namespace motor_pid
 {
 
-#define MAX_MV 100.0
 
     MotorPID::MotorPID()
     {
@@ -36,7 +36,7 @@ namespace motor_pid
         error_I_ = error_I_ + error_P_ * dt;
         error_D_ = (error_P_ - error_P_prev_) / dt;
 
-        mv_ = (int)(kKp * error_P_ + kKi * error_I_ + kKd * error_D_);
+        mv_ = (int)((kKp * error_P_ + kKi * error_I_ + kKd * error_D_) * kMvCoef);
 
         if (mv_ > MAX_MV)
             mv_ = MAX_MV;
@@ -47,6 +47,7 @@ namespace motor_pid
         error_P_prev_ = error_P_;
 
         std::cout << "##### Set volocity to " << target_velocity_ << ", current velocity is " << current_velocity_ << " ####" << std::endl;
+        std::cout << "error_P_=" << error_P_ << " error_I_=" << error_I_ << " error_D_=" << error_D_ << std::endl;
 
         return mv_;
     }
