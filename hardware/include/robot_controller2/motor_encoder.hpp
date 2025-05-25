@@ -11,15 +11,15 @@ namespace motor_encoder
         MotorEncoder();
         void initialize(int p, double wr, double et);
         int getEncodderCount();
-        double getVelocity(double dt);        // m/s
-        double getAngularVelocity(double dt); // rad/s
+        double getVelocity(double dt);         // m/s
+        double getAngularVelocity(double dt);  // rad/s
         ~MotorEncoder();
 
     private:
         int pi_;
         int pin_;
-        double wheel_radius_;
-        double encoder_tooth_;
+        double wheel_radius_;           // m
+        double encoder_tooth_;              
 
         double velocity_ = 0.0;         // m/s
         double angular_velocity_ = 0.0; // rad/s
@@ -31,7 +31,6 @@ namespace motor_encoder
             if (level == 1)
             {
                 count_ += 1;
-                // std::cout << "PIN" << gpio << "=" << count_ << std::endl;
             }
         }
         static void _encCallbackEx(int pi, unsigned gpio, unsigned level, uint32_t tick, void *user)

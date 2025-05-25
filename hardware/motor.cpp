@@ -22,11 +22,11 @@ namespace motor
         pin2_ = p2;
 
         pi_ = pigpio_start(NULL, NULL);
-
         if (pi_ < 0)
         {
-            std::cerr << "Failed to initialize pigpio" << std::endl;
+            std::cerr << "##### [ERROR] Failed to initialize pigpio" << std::endl;
         }
+
         set_mode(pi_, pin1_, PI_OUTPUT);
         set_mode(pi_, pin2_, PI_OUTPUT);
 
@@ -41,7 +41,6 @@ namespace motor
 
     void Motor::setManipulatingVariable(int mv)
     {
-        int e1, e2;
 
         if (mv > MAX_MV)
             mv = MAX_MV;
@@ -50,26 +49,24 @@ namespace motor
 
         if (mv >= 0)
         {
-            e1 = set_PWM_dutycycle(pi_, pin1_, mv);
-            e2 = set_PWM_dutycycle(pi_, pin2_, 0);
-            // std::cerr << pigpio_error(e1) << std::endl;
-            // std::cerr << pigpio_error(e2) << std::endl;
-        }   
+            set_PWM_dutycycle(pi_, pin1_, mv);
+            set_PWM_dutycycle(pi_, pin2_, 0);
+        }
         else
         {
-            e1 = set_PWM_dutycycle(pi_, pin1_, 0);
-            e2 = set_PWM_dutycycle(pi_, pin2_, -mv);
-            // std::cerr << pigpio_error(e1) << std::endl;
-            // std::cerr << pigpio_error(e2) << std::endl;
+            set_PWM_dutycycle(pi_, pin1_, 0);
+            set_PWM_dutycycle(pi_, pin2_, -mv);
         }
-        std::cout << "##### Motor recieved mv=" << mv << " #####" << std::endl;
+        // Debug
+        // std::cout << "##### Motor recieved mv=" << mv << std::endl;
     }
 
     void Motor::stopMotor()
     {
         set_PWM_dutycycle(pi_, pin1_, 0);
         set_PWM_dutycycle(pi_, pin2_, 0);
-        // std::cout << "##### Motor stopped #####" << std::endl;
+        // Debug
+        // std::cout << "##### Motor stopped" << std::endl;
     }
 
     Motor::~Motor()

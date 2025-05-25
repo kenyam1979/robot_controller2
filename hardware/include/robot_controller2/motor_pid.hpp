@@ -14,19 +14,22 @@ namespace motor_pid
         ~MotorPID();
 
     private:
-        const double kKp = 1.0; // 80.0
-        const double kKi = 1.0; //100.0
-        const double kKd = 0.05; // 0.1
-        const double kMvCoef = 70.0;
+        // PID parameters
+        const double kKp = 1.0;
+        const double kKi = 1.0;
+        const double kKd = 0.05;
+        const double kMvCoef = 70.0; // Coefficient to convert PID output to manipulating variable
 
-        double target_velocity_ = 0.0;
-        double current_velocity_ = 0.0;
-        int mv_ = 0;
-
+        // PID calculation
         double error_P_ = 0.0;
         double error_P_prev_ = 0.0;
         double error_I_ = 0.0;
         double error_D_ = 0.0;
+
+        // Input(target), output(mv) and feedback(current)
+        double target_velocity_ = 0.0;
+        double current_velocity_ = 0.0;
+        int mv_ = 0;
     };
 }
 

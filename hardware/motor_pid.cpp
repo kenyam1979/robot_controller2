@@ -28,7 +28,7 @@ namespace motor_pid
 
         if (dt <= 0.0)
         {
-            std::cout << "##### dt is not valid #####" << std::endl;
+            std::cout << "##### [WARNING] dt is not valid" << std::endl;
             return mv_;
         }
 
@@ -46,8 +46,9 @@ namespace motor_pid
 
         error_P_prev_ = error_P_;
 
-        std::cout << "##### Set volocity to " << target_velocity_ << ", current velocity is " << current_velocity_ << " ####" << std::endl;
-        std::cout << "error_P_=" << error_P_ << " error_I_=" << error_I_ << " error_D_=" << error_D_ << std::endl;
+        // Debug
+        // std::cout << "##### Set volocity to " << target_velocity_ << ", current velocity is " << current_velocity_ << std::endl;
+        // std::cout << "##### error_P_=" << error_P_ << " error_I_=" << error_I_ << " error_D_=" << error_D_ << std::endl;
 
         return mv_;
     }
@@ -56,13 +57,13 @@ namespace motor_pid
     {
         target_velocity_ = 0.0;
         current_velocity_ = 0.0;
+        mv_ = 0;
 
         error_P_ = 0.0;
         error_P_prev_ = 0.0;
         error_I_ = 0.0;
         error_D_ = 0.0;
 
-        // std::cout << "##### Motor PID is reset ####" << std::endl;
     }
 
     MotorPID::~MotorPID()

@@ -74,9 +74,6 @@ namespace robot_controller2
     rclcpp::Clock::SharedPtr get_clock() const { return clock_; }
 
   private:
-    // Parameters for the DiffBot simulation
-    double hw_start_sec_;
-    double hw_stop_sec_;
 
     // Objects for logging
     std::shared_ptr<rclcpp::Logger> logger_;

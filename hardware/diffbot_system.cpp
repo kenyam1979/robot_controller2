@@ -1,17 +1,3 @@
-// Copyright 2021 ros2_control Development Team
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
 #include <chrono>
 #include <cmath>
 #include <cstddef>
@@ -59,12 +45,6 @@ namespace robot_controller2
         rclcpp::get_logger("controller_manager.resource_manager.hardware_component.system.DiffBot"));
     clock_ = std::make_shared<rclcpp::Clock>(rclcpp::Clock());
 
-    // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
-    hw_start_sec_ =
-        hardware_interface::stod(info_.hardware_parameters["example_param_hw_start_duration_sec"]);
-    hw_stop_sec_ =
-        hardware_interface::stod(info_.hardware_parameters["example_param_hw_stop_duration_sec"]);
-    // END: This part here is for exemplary purposes - Please do not copy to your production code
     hw_positions_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
     hw_velocities_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
     hw_commands_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
@@ -148,15 +128,6 @@ namespace robot_controller2
   hardware_interface::CallbackReturn DiffBotSystemHardware::on_activate(
       const rclcpp_lifecycle::State & /*previous_state*/)
   {
-    // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
-    RCLCPP_INFO(get_logger(), "Activating ...please wait...");
-
-    // for (auto i = 0; i < hw_start_sec_; i++)
-    // {
-    //   rclcpp::sleep_for(std::chrono::seconds(1));
-    //   RCLCPP_INFO(get_logger(), "%.1f seconds left...", hw_start_sec_ - i);
-    // }
-    // END: This part here is for exemplary purposes - Please do not copy to your production code
 
     motor_pid_left_.initialize();
     motor_pid_right_.initialize();
@@ -167,7 +138,7 @@ namespace robot_controller2
     motor_encoder_left_.initialize(ENC_L, WHEEL_RADIUS, ENCODER_TOOTH);
     motor_encoder_right_.initialize(ENC_R, WHEEL_RADIUS, ENCODER_TOOTH);
 
-    // set some default values
+    // Set default values
     for (auto i = 0u; i < hw_positions_.size(); i++)
     {
       if (std::isnan(hw_positions_[i]))
@@ -186,15 +157,6 @@ namespace robot_controller2
   hardware_interface::CallbackReturn DiffBotSystemHardware::on_deactivate(
       const rclcpp_lifecycle::State & /*previous_state*/)
   {
-    // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
-    RCLCPP_INFO(get_logger(), "Deactivating ...please wait...");
-
-    // for (auto i = 0; i < hw_stop_sec_; i++)
-    // {
-    //   rclcpp::sleep_for(std::chrono::seconds(1));
-    //   RCLCPP_INFO(get_logger(), "%.1f seconds left...", hw_stop_sec_ - i);
-    // }
-    // END: This part here is for exemplary purposes - Please do not copy to your production code
 
     motor_left_.stopMotor();
     motor_right_.stopMotor();
@@ -209,26 +171,8 @@ namespace robot_controller2
   hardware_interface::return_type DiffBotSystemHardware::read(
       const rclcpp::Time & /*time*/, const rclcpp::Duration &period)
   {
-    // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
-    // std::stringstream ss;
-    // ss << "\n Reading states:---------------------------";
-    // for (std::size_t i = 0; i < hw_velocities_.size(); i++)
-    // {
-    //   // Simulate DiffBot wheels's movement as a first-order system
-    //   // Update the joint status: this is a revolute joint without any limit.
-    //   // Simply integrates
-    //   hw_positions_[i] = hw_positions_[i] + period.seconds() * hw_velocities_[i];
-
-    //   ss << std::fixed << std::setprecision(2) << std::endl
-    //      << "\t"
-    //         "position "
-    //      << hw_positions_[i] << " and velocity " << hw_velocities_[i] << " for '"
-    //      << info_.joints[i].name.c_str() << "'!";
-    // }
-    // RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 500, "%s", ss.str().c_str());
 
     double reverse_flg = 1.0;
-
 
     if (hw_commands_[0] < 0)
     {
@@ -241,7 +185,6 @@ namespace robot_controller2
     hw_velocities_[0] = motor_encoder_left_.getAngularVelocity(period.seconds()) * reverse_flg;
     hw_positions_[0] = hw_positions_[0] + period.seconds() * hw_velocities_[0] * WHEEL_RADIUS * reverse_flg;
 
-
     if (hw_commands_[1] < 0)
     {
       reverse_flg = -1.0;
@@ -253,26 +196,12 @@ namespace robot_controller2
     hw_velocities_[1] = motor_encoder_right_.getAngularVelocity(period.seconds()) * reverse_flg;
     hw_positions_[1] = hw_positions_[1] + period.seconds() * hw_velocities_[1] * WHEEL_RADIUS * reverse_flg;
 
-    // END: This part here is for exemplary purposes - Please do not copy to your production code
-
     return hardware_interface::return_type::OK;
   }
 
   hardware_interface::return_type DiffBotSystemHardware::write(
       const rclcpp::Time & /*time*/, const rclcpp::Duration &period)
   {
-    // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
-    // std::stringstream ss;
-    // ss << "\n Writing commands:---------------------------";
-    // for (auto i = 0u; i < hw_commands_.size(); i++)
-    // {
-    //   // Simulate sending commands to the hardware
-    //   hw_velocities_[i] = hw_commands_[i];
-
-    //   ss << std::fixed << std::setprecision(2) << std::endl
-    //      << "\t" << "command " << hw_commands_[i] << " for '" << info_.joints[i].name.c_str() << i << "'!";
-    // }
-    // RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 500, "%s", ss.str().c_str());
 
     int mv_left;
     int mv_right;
@@ -282,8 +211,6 @@ namespace robot_controller2
 
     motor_left_.setManipulatingVariable(mv_left);
     motor_right_.setManipulatingVariable(mv_right);
-
-    // END: This part here is for exemplary purposes - Please do not copy to your production code
 
     return hardware_interface::return_type::OK;
   }
